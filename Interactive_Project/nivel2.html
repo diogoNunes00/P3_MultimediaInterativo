@@ -2,9 +2,10 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Nível 2 - Storyteller</title>
+    <title>Nível 2 -O Álibi</title>
     <link rel="stylesheet" href="nivel2.css">
     <style>
+        /* Mantemos o estilo de esgotado para feedback visual, mas sem o número */
         .card.esgotado {
             opacity: 0.5;
             filter: grayscale(1);
@@ -15,7 +16,7 @@
 <body>
 
 <h2 class="titulo">
-    Mary cozinha a perna do cordeiro
+    Mary prepara o álibi
     <span id="resultado" class="icone"></span>
 </h2>
 
@@ -28,19 +29,25 @@
 <h3 class="subtitulo">Arrasta os elementos para construir a cena</h3>
 
 <div id="contentor" class="elementos">
-    <!-- Fundos -->
-    <div class="card fundo" draggable="true" data-color="#FFD700" id="fundoCozinha" data-uso="5"><span>Cozinha</span></div>
-    <div class="card fundo" draggable="true" data-color="#8B0000" id="fundoForno" data-uso="5"><span>Forno</span></div>
+    <div class="card fundo" draggable="true" data-img="assets/Cozinha2.png" id="fundoCozinha">
+        <span>Cozinha</span>
+    </div>
 
-    <!-- Personagens/Objetos -->
+    <div class="card fundo" draggable="true" data-img="assets/Sala.png" id="fundoSala">
+        <span>Sala</span>
+    </div>
+    <div class="card fundo" draggable="true" data-img="assets/Mercearia.png" id="fundoMercearia">
+        <span>Mercearia</span>
+    </div>
+
     <div class="card personagem" draggable="true" id="mary" data-uso="5">
         <img src="assets/Mary.png" alt="Mary">
     </div>
-    <div class="card personagem" draggable="true" id="pernaCrua" data-uso="5">
-        <img src="assets/pernaCrua.png" alt="Perna Crua">
+    <div class="card personagem" draggable="true" id="perna" data-uso="5">
+        <img src="assets/pernaCordeiro.jpeg" alt="Perna">
     </div>
-    <div class="card personagem" draggable="true" id="pernaAssada" data-uso="5">
-        <img src="assets/pernaAssada.png" alt="Perna Assada">
+    <div class="card personagem" draggable="true" id="maridoMorto" data-uso="5">
+        <img src="assets/homemMorto.png" alt="Marido Morto">
     </div>
 </div>
 
@@ -49,12 +56,12 @@
         <h2 id="tituloFinal">Feedback</h2>
         <p id="descricaoFinal"></p>
         <div style="margin-top: 20px;">
-            <button id="btnAvancar" style="display: none;">Voltar para a história</button>
+            <button id="btnAvancar" style="display: none;">Avançar para Nível 2</button>
             <button id="btnTentarNovamente" onclick="location.reload()">Tentar Novamente</button>
         </div>
     </div>
 </div>
 
-<script src="nivel2.js"></script>
+<script src="nivel1.js"></script>
 </body>
 </html>

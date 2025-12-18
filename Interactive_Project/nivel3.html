@@ -2,8 +2,8 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Nível 1 - Storyteller</title>
-    <link rel="stylesheet" href="nivel1.css">
+    <title>Nível 3 - A Investigação</title>
+    <link rel="stylesheet" href="nivel3.css">
     <style>
         /* Mantemos o estilo de esgotado para feedback visual, mas sem o número */
         .card.esgotado {
@@ -16,7 +16,7 @@
 <body>
 
 <h2 class="titulo">
-    Mary vai buscar a perna do cordeiro e mata o marido
+    Os Polícias investigam a cena do crime
     <span id="resultado" class="icone"></span>
 </h2>
 
@@ -29,9 +29,13 @@
 <h3 class="subtitulo">Arrasta os elementos para construir a cena</h3>
 
 <div id="contentor" class="elementos">
-    <div class="card fundo" draggable="true" data-img="assets/Cave.png" id="fundoCave">
-        <span>Cave</span>
+    <div class="card fundo" draggable="true" data-img="assets/Cozinha1.png" id="fundoCozinha">
+        <span>Cozinha</span>
     </div>
+    <div id="contentor" class="elementos">
+        <div class="card fundo" draggable="true" data-img="assets/Cozinha3.png" id="fundoMesa">
+            <span>Mesa</span>
+        </div>
 
     <div class="card fundo" draggable="true" data-img="assets/Sala.png" id="fundoSala">
         <span>Sala</span>
@@ -41,10 +45,16 @@
         <img src="assets/Mary.png" alt="Mary">
     </div>
     <div class="card personagem" draggable="true" id="perna" data-uso="5">
-        <img src="assets/pernaCordeiro.jpeg" alt="Perna">
+        <img src="assets/pernaCordeiroCozinhada.png" alt="Perna">
     </div>
     <div class="card personagem" draggable="true" id="marido" data-uso="5">
-        <img src="assets/Marido.png" alt="Marido">
+        <img src="assets/Policia1.png" alt="Polícia1">
+    </div>
+    <div class="card personagem" draggable="true" id="marido" data-uso="5">
+        <img src="assets/Policia2.png" alt="Polícia2">
+    </div>
+    <div class="card personagem" draggable="true" id="marido" data-uso="5">
+        <img src="assets/Detetive.png" alt="Detetive">
     </div>
     <div class="card personagem" draggable="true" id="maridoMorto" data-uso="5">
         <img src="assets/homemMorto.png" alt="Marido Morto">
@@ -65,3 +75,4 @@
 <script src="nivel1.js"></script>
 </body>
 </html>
+

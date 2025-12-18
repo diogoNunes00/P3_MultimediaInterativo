@@ -1,10 +1,9 @@
-// Seletores base
 const cards = document.querySelectorAll('.card');
 const slots = document.querySelectorAll('.slot');
 const popup = document.getElementById('popup');
 const btnAvancar = document.getElementById('btnAvancar');
 
-// Inicialização dos slots
+// 1. INICIALIZAÇÃO DOS SLOTS
 slots.forEach(slot => {
     let content = slot.querySelector('.slot-content');
     if (!content) {
@@ -12,21 +11,24 @@ slots.forEach(slot => {
         content.classList.add('slot-content');
         slot.appendChild(content);
     }
-    content.insertAdjacentHTML('beforeend', '<span class="fx fx-heart">❤️</span><span class="fx fx-ghost"></span>');
+    if (!content.querySelector('.fx-heart')) {
+        content.insertAdjacentHTML('beforeend', `
+            <span class="fx fx-heart">❤️</span>
+            <span class="fx fx-ghost">👻</span>
+        `);
+    }
 });
 
-// Lógica de Drag & Drop com Clonagem e Limite Invisível
+// 2. DRAG START
 cards.forEach(card => {
     card.addEventListener('dragstart', e => {
-        const usos = parseInt(card.getAttribute('data-uso'));
-        if (usos <= 0) {
-            e.preventDefault();
-            return;
-        }
+        const usos = parseInt(card.getAttribute('data-uso') || "999");
+        if (usos <= 0) { e.preventDefault(); return; }
         e.dataTransfer.setData('text/plain', card.id);
     });
 });
 
+// 3. DROP NOS SLOTS
 slots.forEach(slot => {
     slot.addEventListener('dragover', e => {
         e.preventDefault();
@@ -43,80 +45,91 @@ slots.forEach(slot => {
         const originalCard = document.getElementById(cardId);
         if (!originalCard) return;
 
-        // Lógica de Fundo (Apenas pinta)
+        // --- LÓGICA DE FUNDO ---
         if (originalCard.classList.contains('fundo')) {
-            slot.style.backgroundColor = originalCard.getAttribute('data-color');
-            atualizarContadorInvisivel(originalCard);
+            const imgPath = originalCard.getAttribute('data-img');
+            slot.style.backgroundImage = `url('${imgPath}')`;
+            slot.style.backgroundColor = 'transparent';
+            atualizarContador(originalCard);
             avaliarCena();
             return;
         }
 
-        // Lógica de Personagem: Criação de CLONE
-        const usosAtuais = parseInt(originalCard.getAttribute('data-uso'));
+        // --- LÓGICA DE PERSONAGEM (CLONE COM POSIÇÃO) ---
+        const usosAtuais = parseInt(originalCard.getAttribute('data-uso') || "0");
         if (usosAtuais > 0) {
             const clone = originalCard.cloneNode(true);
+
+            // Atribuímos o ID original ao data-personagem para o CSS posicionar
+            clone.setAttribute('data-personagem', originalCard.id);
             clone.removeAttribute('id');
 
-            // Remover do slot ao clicar
             clone.addEventListener('click', () => {
                 clone.remove();
+                aplicarEfeitos(slot);
                 avaliarCena();
             });
 
             slot.querySelector('.slot-content').appendChild(clone);
-            atualizarContadorInvisivel(originalCard);
-            aplicarEfeitosSlot(slot);
+            atualizarContador(originalCard);
+            aplicarEfeitos(slot);
             avaliarCena();
         }
     });
 });
 
-// Atualiza o atributo de dados sem mexer no DOM visível (removemos a parte do badge)
-function atualizarContadorInvisivel(card) {
+function atualizarContador(card) {
     let usos = parseInt(card.getAttribute('data-uso'));
+    if (isNaN(usos)) return;
     usos--;
     card.setAttribute('data-uso', usos);
-
-    // Se chegar a zero, desativa o arrasto e aplica estilo visual cinzento
-    if (usos <= 0) {
-        card.classList.add('esgotado');
-        card.draggable = false;
-    }
+    if (usos <= 0) card.classList.add('esgotado');
 }
 
-// Lógica de Avaliação
+function aplicarEfeitos(slot) {
+    const content = slot.querySelector('.slot-content');
+    const imgs = Array.from(content.querySelectorAll('img'));
+
+    const temMary = imgs.some(i => i.alt === 'Mary');
+    const temMarido = imgs.some(i => i.alt === 'Marido');
+    const temMorto = imgs.some(i => i.alt === 'Marido Morto');
+
+    const heart = slot.querySelector('.fx-heart');
+    const ghost = slot.querySelector('.fx-ghost');
+
+    if (temMary && temMarido && !temMorto) heart.classList.add('show');
+    else heart.classList.remove('show');
+
+    if (temMorto) ghost.classList.add('show');
+    else ghost.classList.remove('show');
+}
+
 function avaliarCena() {
     const s1 = document.getElementById('slot1').querySelector('.slot-content');
     const s2 = document.getElementById('slot2').querySelector('.slot-content');
     const s3 = document.getElementById('slot3').querySelector('.slot-content');
 
-    const check = (slot, altText) => Array.from(slot.querySelectorAll('img')).some(i => i.alt === altText);
+    const check = (container, alt) => Array.from(container.querySelectorAll('img')).some(i => i.alt === alt);
+    const temFundo = (id) => document.getElementById(id).style.backgroundImage !== "";
 
-    const maryCave = check(s1, 'Mary') && check(s1, 'Perna');
-    const ataqueSala = check(s2, 'Mary') && check(s2, 'Perna') && check(s2, 'Marido');
-    const mortoFim = check(s3, 'Marido Morto');
+    const maryCave = temFundo('slot1') && check(s1, 'Mary') && check(s1, 'Perna');
+    const ataqueSala = temFundo('slot2') && check(s2, 'Mary') && check(s2, 'Marido') && check(s2, 'Perna');
+    const maridoMorto = check(s3, 'Marido Morto');
 
-    if (maryCave && ataqueSala && mortoFim) {
-        exibirFeedback(true, "✅ Sucesso!", "Parabéns! Reconstituíste a história corretamente.");
-    } else if (mortoFim && !maryCave) {
-        exibirFeedback(false, "❌ Erro Narrativo", "A Mary precisa de obter a arma primeiro!");
+    if (maryCave && ataqueSala && maridoMorto) {
+        exibirFeedback(true, "✅ Final Desbloqueado!", "Mary executou o plano perfeitamente.");
+    } else if (maridoMorto && !maryCave) {
+        exibirFeedback(false, "❌ Erro Narrativo", "Como o marido morreu sem a Mary ir buscar a arma?");
     }
-}
-
-function aplicarEfeitosSlot(slot) {
-    const content = slot.querySelector('.slot-content');
-    const temMary = Array.from(content.querySelectorAll('img')).some(i => i.alt === 'Mary');
-    const temMarido = Array.from(content.querySelectorAll('img')).some(i => i.alt === 'Marido');
-    const heart = slot.querySelector('.fx-heart');
-    if (temMary && temMarido) heart?.classList.add('show');
-    else heart?.classList.remove('show');
 }
 
 function exibirFeedback(sucesso, titulo, desc) {
     document.getElementById('tituloFinal').textContent = titulo;
     document.getElementById('descricaoFinal').textContent = desc;
     btnAvancar.style.display = sucesso ? 'inline-block' : 'none';
+    if (!sucesso) document.body.classList.add('error-bg');
+    else document.body.classList.remove('error-bg');
     popup.style.display = 'flex';
 }
 
-btnAvancar.addEventListener('click', () => { window.location.href = 'index.html'; });
+btnAvancar.addEventListener('click', () => { window.location.href = 'nivel2.html'; });
