@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Nível 1 - Storyteller</title>
+    <link rel="stylesheet" href="nivel1.css">
+    <style>
+        /* Mantemos o estilo de esgotado para feedback visual, mas sem o número */
+        .card.esgotado {
+            opacity: 0.5;
+            filter: grayscale(1);
+            cursor: not-allowed !important;
+        }
+    </style>
+</head>
+<body>
+
+<h2 class="titulo">
+    Mary vai buscar a perna do cordeiro e mata o marido
+    <span id="resultado" class="icone"></span>
+</h2>
+
+<div class="painel">
+    <div class="slot" id="slot1"><div class="slot-content"></div></div>
+    <div class="slot" id="slot2"><div class="slot-content"></div></div>
+    <div class="slot" id="slot3"><div class="slot-content"></div></div>
+</div>
+
+<h3 class="subtitulo">Arrasta os elementos para construir a cena</h3>
+
+<div id="contentor" class="elementos">
+    <div class="card fundo" draggable="true" data-color="#2F2F2F" id="fundoCave" data-uso="5"><span>Cave</span></div>
+    <div class="card fundo" draggable="true" data-color="#FFA500" id="fundoSala" data-uso="5"><span>Sala</span></div>
+
+    <div class="card personagem" draggable="true" id="mary" data-uso="5">
+        <img src="assets/Mary.png" alt="Mary">
+    </div>
+    <div class="card personagem" draggable="true" id="perna" data-uso="5">
+        <img src="assets/pernaCordeiro.png" alt="Perna">
+    </div>
+    <div class="card personagem" draggable="true" id="marido" data-uso="5">
+        <img src="assets/Marido.png" alt="Marido">
+    </div>
+    <div class="card personagem" draggable="true" id="maridoMorto" data-uso="5">
+        <img src="assets/homemMorto.png" alt="Marido Morto">
+    </div>
+</div>
+
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <h2 id="tituloFinal">Feedback</h2>
+        <p id="descricaoFinal"></p>
+        <div style="margin-top: 20px;">
+            <button id="btnAvancar" style="display: none;">Voltar para a historia</button>
+            <button id="btnTentarNovamente" onclick="location.reload()">Tentar Novamente</button>
+        </div>
+    </div>
+</div>
+
+<script src="nivel1.js"></script>
+</body>
+</html>
